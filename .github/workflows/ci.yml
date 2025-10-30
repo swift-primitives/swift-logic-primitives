@@ -70,19 +70,6 @@ jobs:
       - name: Run tests
         run: swift test -c ${{ matrix.config }}
 
-  linux-swift510:
-    name: Ubuntu (Swift 5.10)
-    runs-on: ubuntu-latest
-    container: swift:5.10
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Build
-        run: swift build
-
-      - name: Run tests
-        run: swift test
-
   linux-swift62:
     name: Ubuntu (Swift 6.2)
     runs-on: ubuntu-latest
