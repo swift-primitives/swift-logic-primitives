@@ -8,7 +8,7 @@
 import Foundation
 
 // Inequality (!=) Operator for Optional Values
-//infix operator != : ComparisonPrecedence
+// infix operator != : ComparisonPrecedence
 
 /// Custom infix operator for logical inequality of two optional Equatable values.
 ///
@@ -51,10 +51,10 @@ import Foundation
 ///     print("An error occurred: \(error)") // Prints "An error occurred: intentionalError"
 /// }
 /// ```
-//public func !=<T: Equatable>(
+// public func !=<T: Equatable>(
 //    lhs: T?,
 //    rhs: @autoclosure () throws -> T?
-//) rethrows -> Bool {
+// ) rethrows -> Bool {
 //
 //    let rhsValue = try rhs()
 //    
@@ -66,14 +66,14 @@ import Foundation
 //    default:
 //        return true
 //    }
-//}
+// }
 
 public func !=<T: Equatable>(
     lhs: T?,
     rhs: @autoclosure () throws -> T?
 ) rethrows -> Bool {
     let rhsValue = try rhs()
-    
+
     if let lhsValue = lhs, let rhsValue = rhsValue {
         return lhsValue != rhsValue
     }

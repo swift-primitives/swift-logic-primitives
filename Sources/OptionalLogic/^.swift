@@ -36,7 +36,7 @@ public func ^<T: Equatable>(
     guard let lhs = lhs else {
         return nil
     }
-    
+
     guard let rhs = try rhs() else {
         return nil
     }

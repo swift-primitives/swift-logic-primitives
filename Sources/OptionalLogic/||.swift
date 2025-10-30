@@ -56,9 +56,9 @@ public func || (
     if lhs == true {
         return true
     }
-    
+
     let rhs = try rhs()
-    
+
     if rhs == true {
         return true
     }

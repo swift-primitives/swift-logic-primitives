@@ -36,4 +36,3 @@ public func ==<A>(
         lhs(a) == rhs(a)
     }
 }
-

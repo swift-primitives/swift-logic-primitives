@@ -1,228 +1,25 @@
 # Swift Logic Operators
 
-Swift Logic Operators provides logical operators for optional Boolean values and Predicates.
+[![CI](https://github.com/coenttb/swift-logic-operators/workflows/CI/badge.svg)](https://github.com/coenttb/swift-logic-operators/actions/workflows/ci.yml)
+![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
+
+Logical operators for optional Boolean values and predicates in Swift.
+
+## Overview
+
+Swift Logic Operators extends Swift's logical operators to work with optional Boolean values and predicate functions (closures returning `Bool`). It provides type-safe implementations of common logical operations that handle `nil` values gracefully and compose predicates functionally.
 
 ## Features
 
-- Logical NOT (`!`) for Predicates and optional Booleans
-- Logical AND (`&&`) for Predicates and optional Booleans
-- Logical OR (`||`) for Predicates and optional Booleans
-- Logical NAND (`!&&`) for optional Booleans
-- Logical NOR (`!||`) for optional Booleans
-- Logical XOR (`^`) for Predicates and optional Booleans
-- Logical XNOR (`!^`) for optional Booleans
-- Equality (`==`) and Inequality (`!=`) comparisons for Predicates and optional values
-
-## Usage
-
-### Logical Operators for Optional Booleans
-
-#### NOT (`!`)
-
-Performs a logical NOT operation on an optional Boolean value.
-
-```swift
-!true  == false
-!false == true
-!nil   == nil
-```
-
-#### AND (`&&`)
-
-Performs a logical AND operation between two optional Boolean values.
-
-```swift
-true && false  == false
-true && nil    == nil
-false && nil   == nil
-false && false == false
-true && true   == true
-nil && nil     == nil
-```
-
-#### NAND (`!&&`)
-
-Performs a logical NAND operation between two optional Boolean values.
-
-```swift
-true !&& false  == true
-true !&& nil    == nil
-false !&& nil   == nil
-false !&& false == true
-true !&& true   == false
-nil !&& nil     == nil
-```
-
-#### OR (`||`)
-
-Performs a logical OR operation between two optional Boolean values.
-
-```swift
-true || false   == true
-true || nil     == true
-false || nil    == nil
-false || false  == false
-nil || nil      == nil
-```
-
-#### NOR (`!||`)
-
-Performs a logical NOR operation between two optional Boolean values.
-
-```swift
-true !|| false  == false
-true !|| nil    == nil
-false !|| nil   == nil
-false !|| false == true
-nil !|| nil     == nil
-```
-
-#### Equality (`==`)
-
-Checks for equality between two optional Boolean values.
-
-```swift
-true == false == false
-true == true  == true
-true == nil   == nil
-nil == nil    == nil
-```
-
-#### Inequality (`!=`)
-
-Checks for inequality between two optional Boolean values.
-
-```swift
-true != false == true
-true != true  == false
-true != nil   == nil
-nil != nil    == nil
-```
-
-#### XOR (`^`)
-
-Performs a logical XOR operation between two optional Boolean values.
-
-```swift
-true ^ false   == true
-true ^ nil     == nil
-false ^ nil    == nil
-false ^ false) == false
-```
-
-#### XNOR (`!^`)
-
-Performs a logical XNOR operation between two optional Boolean values.
-
-```swift
-true !^ false  == false
-true !^ nil    == nil
-false !^ nil   == nil
-false !^ false == true
-```
-
-### Logical Operators for Predicates
-
-#### AND (`&&`)
-
-Performs a logical AND operation between two Boolean-returning closures.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
-let isEvenAndPositive = isEven && isPositive
-
-isEvenAndPositive(4)  == true
-isEvenAndPositive(-4) == false
-isEvenAndPositive(3)  == false
-isEvenAndPositive(-3) == false
-```
-
-#### OR (`||`)
-
-Performs a logical OR operation between two Boolean-returning closures.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isNegative: (Int) -> Bool = { $0 < 0 }
-let isEvenOrNegative = isEven || isNegative
-
-isEvenOrNegative(4)  == true
-isEvenOrNegative(-4) == true
-isEvenOrNegative(3)  == false
-isEvenOrNegative(-3) == true
-```
-
-#### NOT (`!`)
-
-Performs a logical NOT operation on the result of a Boolean-returning closure.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isOdd = !isEven
-
-isEven(4) = true
-isOdd(4)  = false
-isEven(5) = false
-isOdd(5)  = true
-```
-
-#### EQUAL (`==`)
-
-Performs a logical equality check between the results of two Boolean-returning closures.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
-let isEvenAndPositiveEqual = isEven == isPositive
-
-isEvenAndPositiveEqual(4)  == false
-isEvenAndPositiveEqual(-4) == false
-isEvenAndPositiveEqual(3)  == false
-isEvenAndPositiveEqual(-3) == true
-```
-
-#### NOT EQUAL (`!=`)
-
-Performs a logical inequality check between the results of two Boolean-returning closures.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
-let isEvenAndPositiveDifferent = isEven != isPositive
-
-isEvenAndPositiveDifferent(4)  = true
-isEvenAndPositiveDifferent(-4) = true
-isEvenAndPositiveDifferent(3)  = true
-isEvenAndPositiveDifferent(-3) = false
-```
-
-#### XOR (`^`)
-
-Performs a logical XOR (exclusive OR) operation between two Boolean-returning closures.
-
-```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
-let isEvenOrPositive = isEven ^ isPositive
-
-isEvenOrPositive(4)  == false
-isEvenOrPositive(-4) == true
-isEvenOrPositive(3)  == true
-isEvenOrPositive(-3) == false
-```
-
-## Tests
-
-This package includes comprehensive tests for all custom logical operators and functions. The tests ensure that the operators behave correctly with all possible combinations of optional Boolean values.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+- **Optional Boolean Operators**: NOT (`!`), AND (`&&`), OR (`||`), XOR (`^`), NAND (`!&&`), NOR (`!||`), XNOR (`!^`)
+- **Predicate Composition**: Combine and transform `(A) -> Bool` closures with logical operators
+- **Nil-Safe**: All optional operators return `nil` when any operand is `nil`
+- **Type-Safe**: Compile-time guarantees for logical operations
+- **Error Handling**: Support for throwing closures with `rethrows`
 
 ## Installation
 
-To install LogicOperators, add the following line to your `Package.swift` file:
+Add the package to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -230,11 +27,12 @@ dependencies: [
 ]
 ```
 
-You can then make LogicOperators available to your package's target by including LogicOperators in the dependencies of any target in your package, as follows:
+Then add the product to your target:
+
 ```swift
 targets: [
     .target(
-        name: "TheNameOfYourTarget",
+        name: "YourTarget",
         dependencies: [
             .product(name: "LogicOperators", package: "swift-logic-operators")
         ]
@@ -242,9 +40,124 @@ targets: [
 ]
 ```
 
-Finally, import LogicOperators in your .swift file(s), as follows:
+## Quick Start
+
 ```swift
 import LogicOperators
 
-...your swift code...
+// Optional Boolean operations
+let a: Bool? = true
+let b: Bool? = nil
+let result = a && b  // nil
+
+// Predicate composition
+let isEven: (Int) -> Bool = { $0 % 2 == 0 }
+let isPositive: (Int) -> Bool = { $0 > 0 }
+let isEvenAndPositive = isEven && isPositive
+
+isEvenAndPositive(4)  // true
+isEvenAndPositive(-4) // false
 ```
+
+## Usage
+
+### Optional Boolean Operators
+
+All optional Boolean operators propagate `nil` values:
+
+```swift
+let t: Bool? = true
+let f: Bool? = false
+let n: Bool? = nil
+
+// NOT
+!t  // false
+!f  // true
+!n  // nil
+
+// AND
+t && f  // false
+t && n  // nil
+f && n  // nil
+
+// OR
+t || f  // true
+t || n  // true
+f || n  // nil
+
+// XOR
+t ^ f  // true
+t ^ n  // nil
+f ^ f  // false
+
+// NAND
+(t !&& f)  // true
+(t !&& t)  // false
+
+// NOR
+(t !|| f)  // false
+(f !|| f)  // true
+
+// XNOR
+(t !^ f)  // false
+(t !^ t)  // true
+```
+
+### Predicate Composition
+
+Combine Boolean predicates using logical operators:
+
+```swift
+let isEven: (Int) -> Bool = { $0 % 2 == 0 }
+let isPositive: (Int) -> Bool = { $0 > 0 }
+
+// AND
+let isEvenAndPositive = isEven && isPositive
+isEvenAndPositive(4)  // true
+isEvenAndPositive(-4) // false
+
+// OR
+let isNegative: (Int) -> Bool = { $0 < 0 }
+let isEvenOrNegative = isEven || isNegative
+isEvenOrNegative(3)  // false
+isEvenOrNegative(-3) // true
+
+// NOT
+let isOdd = !isEven
+isOdd(5)  // true
+isOdd(4)  // false
+
+// XOR
+let isEvenXorPositive = isEven ^ isPositive
+isEvenXorPositive(4)  // false (both true)
+isEvenXorPositive(-4) // true  (even but not positive)
+isEvenXorPositive(3)  // true  (positive but not even)
+isEvenXorPositive(-3) // false (neither)
+
+// Equality
+let same = isEven == isPositive
+same(4)  // true (both predicates return true for 4)
+same(-4) // false (isEven true, isPositive false)
+same(3)  // false (isEven false, isPositive true)
+same(-3) // true (both predicates return false for -3)
+
+// Inequality
+let different = isEven != isPositive
+different(4)  // false (both predicates return true)
+different(-4) // true (different results)
+different(3)  // true (different results)
+different(-3) // false (both predicates return false)
+```
+
+## Related Packages
+
+- [swift-html](https://github.com/coenttb/swift-html) - A Swift DSL for type-safe HTML
+- [swift-css](https://github.com/coenttb/swift-css) - A Swift DSL for type-safe CSS
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.

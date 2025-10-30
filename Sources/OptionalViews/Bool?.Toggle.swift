@@ -6,10 +6,10 @@
 //
 
 #if canImport(SwiftUI)
-import SwiftUI
 import OptionalLogic
+import SwiftUI
 
-extension Bool?:/*@retroactive*/ CaseIterable {
+extension Bool?: /*@retroactive*/ CaseIterable {
     public static let allCases: [Self] = [true, false, nil]
 }
 
@@ -29,35 +29,34 @@ extension Bool? {
         Label: SwiftUI.View,
         NilLabel: SwiftUI.View
     >: SwiftUI.View {
-        var label: ()->Label
-        var nilLabel: ()->NilLabel
+        var label: () -> Label
+        var nilLabel: () -> NilLabel
         @Binding var isOn: Bool?
 
         public init(
-            _ label: @escaping ()->Label,
-            _ nilLabel: @escaping ()->NilLabel,
+            _ label: @escaping () -> Label,
+            _ nilLabel: @escaping () -> NilLabel,
             isOn: Binding<Bool?>
         ) {
             self.label = label
             self.nilLabel = nilLabel
             self._isOn = isOn
         }
-        
+
         public init(
             _ label: String,
             isOn: Binding<Bool?>
         )
         where
         Label == SwiftUI.Text,
-        NilLabel == SwiftUI.Text
-        {
+        NilLabel == SwiftUI.Text {
             self.label = { Text(label) }
             self.nilLabel = { Text("nil") }
             self._isOn = isOn
         }
-        
+
         public var body: some SwiftUI.View {
-            
+
             if let _ = isOn {
                 HStack {
                     SwiftUI.Toggle(
@@ -81,8 +80,7 @@ extension Bool? {
     }
 }
 
-
-//#Preview("Test") {
+// #Preview("Test") {
 //    
 //    @Previewable @State var isOn: Bool? = nil
 //    
@@ -124,7 +122,7 @@ extension Bool? {
 //        }
 //        .frame(width: 200, height: 200)
 //    }
-//}
+// }
 //
 
 #if os(macOS)
@@ -139,11 +137,11 @@ extension NSColor {
 }
 
 //
-//extension Color {
+// extension Color {
 //    static func isOn(_ isOn: Bool?) -> Color {
 //        Color(nsColor: .isOn(isOn))
 //    }
-//}
+// }
 #endif
 
 #if os(iOS)
@@ -155,5 +153,3 @@ extension Color {
 #endif
 
 #endif
-
-

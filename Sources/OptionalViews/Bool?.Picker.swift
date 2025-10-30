@@ -6,36 +6,35 @@
 //
 
 #if canImport(SwiftUI)
-import SwiftUI
 import Foundation
+import SwiftUI
 
 extension Bool? {
     public struct Picker<
         Content: SwiftUI.View,
         Label: SwiftUI.View
     >: SwiftUI.View {
-        var content: (Bool?)->Content
-        var label: ()->Label
+        var content: (Bool?) -> Content
+        var label: () -> Label
         @Binding var isOn: Bool?
-        
+
         public init(
-            _ content: @escaping (Bool?)->Content,
-            _ label: @escaping ()->Label,
+            _ content: @escaping (Bool?) -> Content,
+            _ label: @escaping () -> Label,
             isOn: Binding<Bool?>
         ) {
             self.content = content
             self.label = label
             self._isOn = isOn
         }
-        
+
         public init(
             _ label: String,
             isOn: Binding<Bool?>
         )
         where
         Content == SwiftUI.Text,
-        Label == SwiftUI.Text
-        {
+        Label == SwiftUI.Text {
             self = .init(
                 {
                     switch $0 {
@@ -51,9 +50,9 @@ extension Bool? {
                 isOn: isOn
             )
         }
-        
+
         public var body: some SwiftUI.View {
-            
+
 #if os(macOS)
             HStack(spacing: 5) {
                 SwiftUI.Picker(
@@ -78,11 +77,11 @@ extension Bool? {
 //                Spacer()
             }
 #endif
-            
+
 #if os(iOS)
             VStack(alignment: .leading, spacing: 5) {
                 self.label()
-                    
+
                 HStack {
                     Spacer()
                     SwiftUI.Picker(
@@ -106,8 +105,7 @@ extension Bool? {
     }
 }
 
-
-//#Preview {
+// #Preview {
 //    
 //    @Previewable @State var isOn: Bool? = nil
 //    @Previewable @State var isOn2: Bool? = nil
@@ -119,5 +117,5 @@ extension Bool? {
 //            Bool?.Picker("Very short question", isOn: $isOn2)
 //        }
 //    }
-//}
+// }
 #endif

@@ -7,9 +7,9 @@
 
 import Foundation
 import LogicOperators
-import PredicateLogic
-import OptionalLogic
 import LogicTesting
+import OptionalLogic
+import PredicateLogic
 import Testing
 
 @Test("^", arguments: Bool.allCases, Bool.allCases)
@@ -23,7 +23,7 @@ func negateOptionalClosureTest() {
         .some({ $0 % 2 == 0 }),
         .none
     ]
-    
+
     for optionalIsEven in closures {
         switch optionalIsEven {
         case let .some(isEven):

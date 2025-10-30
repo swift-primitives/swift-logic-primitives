@@ -22,9 +22,9 @@ extension Package {
     static func logicOperators(
         targets: [(name: String, dependencies: [Target.Dependency])]
     ) -> Package {
-        
+
         let names = targets.map(\.name)
-        
+
         return Package(
             name: "swift-logic-operators",
             platforms: [ .macOS(.v10_15), .iOS(.v13) ],
@@ -85,6 +85,6 @@ let package = Package.logicOperators(
             dependencies: [
                 .optional
             ]
-        ),
+        )
     ]
 )

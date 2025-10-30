@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Testing
 import LogicTesting
+import Testing
 
 @Test("Bool")
 func booliuygsdjf() {
@@ -57,4 +57,3 @@ func boolewsdfsf() {
 func boolsdfsdf() {
     #expect([(Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool)].allCases.count == (Bool.allCases.count ^^ 10))
 }
-

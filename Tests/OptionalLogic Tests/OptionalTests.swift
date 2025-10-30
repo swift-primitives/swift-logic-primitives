@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import OptionalLogic
 import LogicTesting
+import OptionalLogic
 import Testing
 
 @Test("!", arguments: Bool?.allCases)
@@ -74,7 +74,7 @@ func andTest(left: Bool?, right: Bool?) {
 
 @Test("&&")
 func andTest2() {
-    
+
     #expect((Bool?.none && Bool?.none) == nil)
 }
 
@@ -129,7 +129,6 @@ func orTest(left: Bool?, right: Bool?) {
         #expect((left || right) == .none)
     }
 }
-
 
 @Test("||")
 func orTest2() {

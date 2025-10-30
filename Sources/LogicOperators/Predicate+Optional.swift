@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import PredicateLogic
 import OptionalLogic
+import PredicateLogic
 
 /// Custom prefix operator for logical negation of an optional closure returning a Boolean value.
 ///

@@ -6,5 +6,5 @@
 //
 
 import Foundation
-@_exported import PredicateLogic
 @_exported import OptionalLogic
+@_exported import PredicateLogic

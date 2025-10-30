@@ -8,7 +8,7 @@
 import Foundation
 
 // AND (??) Operator for Optional Booleans
-//infix operator ?? : LogicalConjunctionPrecedence
+// infix operator ?? : LogicalConjunctionPrecedence
 
 /// Custom infix operator for logical AND of two optional Boolean values.
 ///
@@ -65,4 +65,3 @@ public func && (
     }
     return left && right
 }
-

@@ -111,5 +111,3 @@ extension [(Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool, Bool)] {
         }
     }
 }
-
-

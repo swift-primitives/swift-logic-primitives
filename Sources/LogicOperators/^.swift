@@ -32,4 +32,3 @@ public func ^ (
 ) -> Bool {
     return lhs != rhs
 }
-
