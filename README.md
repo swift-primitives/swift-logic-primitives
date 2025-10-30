@@ -149,11 +149,6 @@ different(3)  // true (different results)
 different(-3) // false (both predicates return false)
 ```
 
-## Related Packages
-
-- [swift-html](https://github.com/coenttb/swift-html) - A Swift DSL for type-safe HTML
-- [swift-css](https://github.com/coenttb/swift-css) - A Swift DSL for type-safe CSS
-
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
