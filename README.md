@@ -149,6 +149,12 @@ different(3)  // true (different results)
 different(-3) // false (both predicates return false)
 ```
 
+## Related Packages
+
+### Used By
+
+- [coenttb-ui](https://github.com/coenttb/coenttb-ui): A Swift package with UI components for coenttb applications.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
