@@ -1,164 +1,104 @@
-# Swift Logic Operators
+# Logic Primitives
 
-[![CI](https://github.com/coenttb/swift-logic-operators/workflows/CI/badge.svg)](https://github.com/coenttb/swift-logic-operators/actions/workflows/ci.yml)
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
-Logical operators for optional Boolean values and predicates in Swift.
+Classical and three-valued (Strong Kleene) logic for Swift — a `Logic` namespace of operators, protocols, and result builders over `Bool` and `Bool?`, with zero platform dependencies.
 
-## Overview
-
-Swift Logic Operators extends Swift's logical operators to work with optional Boolean values and predicate functions (closures returning `Bool`). It provides type-safe implementations of common logical operations that handle `nil` values gracefully and compose predicates functionally.
-
-## Features
-
-- **Optional Boolean Operators**: NOT (`!`), AND (`&&`), OR (`||`), XOR (`^`), NAND (`!&&`), NOR (`!||`), XNOR (`!^`)
-- **Predicate Composition**: Combine and transform `(A) -> Bool` closures with logical operators
-- **Nil-Safe**: All optional operators return `nil` when any operand is `nil`
-- **Type-Safe**: Compile-time guarantees for logical operations
-- **Error Handling**: Support for throwing closures with `rethrows`
-
-## Installation
-
-Add the package to your `Package.swift`:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/coenttb/swift-logic-operators.git", from: "0.1.0")
-]
-```
-
-Then add the product to your target:
-
-```swift
-targets: [
-    .target(
-        name: "YourTarget",
-        dependencies: [
-            .product(name: "LogicOperators", package: "swift-logic-operators")
-        ]
-    )
-]
-```
+---
 
 ## Quick Start
 
-```swift
-import LogicOperators
+`Logic` is a small vocabulary for reasoning about truth values. `Bool` carries classical two-valued logic; `Bool?` carries three-valued logic where `nil` is the *unknown* value, following the Strong Kleene truth tables used by SQL and other systems that must reason in the presence of missing data.
 
-// Optional Boolean operations
-let a: Bool? = true
-let b: Bool? = nil
-let result = a && b  // nil
-
-// Predicate composition
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
-let isEvenAndPositive = isEven && isPositive
-
-isEvenAndPositive(4)  // true
-isEvenAndPositive(-4) // false
-```
-
-## Usage
-
-### Optional Boolean Operators
-
-All optional Boolean operators propagate `nil` values:
+Three-valued conditions read declaratively through result builders — `all` is conjunction, `any` is disjunction, `none` is its negation:
 
 ```swift
-let t: Bool? = true
-let f: Bool? = false
-let n: Bool? = nil
+import Logic_Ternary_Primitives
 
-// NOT
-!t  // false
-!f  // true
-!n  // nil
+let isAuthenticated: Bool? = true
+let permissionLoaded: Bool? = nil   // still resolving — unknown
+let withinQuota: Bool? = true
 
-// AND
-t && f  // false
-t && n  // nil
-f && n  // nil
-
-// OR
-t || f  // true
-t || n  // true
-f || n  // nil
-
-// XOR
-t ^ f  // true
-t ^ n  // nil
-f ^ f  // false
-
-// NAND
-(t !&& f)  // true
-(t !&& t)  // false
-
-// NOR
-(t !|| f)  // false
-(f !|| f)  // true
-
-// XNOR
-(t !^ f)  // false
-(t !^ t)  // true
+// Strong Kleene conjunction: `false` dominates, then `unknown`, then `true`.
+let granted = Bool?.all {
+    isAuthenticated
+    permissionLoaded
+    withinQuota
+}
+// granted == nil: with no definite `false`, an unknown input keeps the result unknown.
 ```
 
-### Predicate Composition
-
-Combine Boolean predicates using logical operators:
+The same logic is available as operators and named functions. Classical operators work over any `Logic.Protocol` type (such as `Bool`); the three-valued operators propagate `unknown` through `Bool?`:
 
 ```swift
-let isEven: (Int) -> Bool = { $0 % 2 == 0 }
-let isPositive: (Int) -> Bool = { $0 > 0 }
+import Logic_Primitives   // umbrella: binary + ternary
 
-// AND
-let isEvenAndPositive = isEven && isPositive
-isEvenAndPositive(4)  // true
-isEvenAndPositive(-4) // false
+// Classical, two-valued:
+let parity = Logic.xor(true, false)        // true
+let vacuous = Logic.implies(false, true)   // true
 
-// OR
-let isNegative: (Int) -> Bool = { $0 < 0 }
-let isEvenOrNegative = isEven || isNegative
-isEvenOrNegative(3)  // false
-isEvenOrNegative(-3) // true
-
-// NOT
-let isOdd = !isEven
-isOdd(5)  // true
-isOdd(4)  // false
-
-// XOR
-let isEvenXorPositive = isEven ^ isPositive
-isEvenXorPositive(4)  // false (both true)
-isEvenXorPositive(-4) // true  (even but not positive)
-isEvenXorPositive(3)  // true  (positive but not even)
-isEvenXorPositive(-3) // false (neither)
-
-// Equality
-let same = isEven == isPositive
-same(4)  // true (both predicates return true for 4)
-same(-4) // false (isEven true, isPositive false)
-same(3)  // false (isEven false, isPositive true)
-same(-3) // true (both predicates return false for -3)
-
-// Inequality
-let different = isEven != isPositive
-different(4)  // false (both predicates return true)
-different(-4) // true (different results)
-different(3)  // true (different results)
-different(-3) // false (both predicates return false)
+// Three-valued, unknown-propagating:
+let changed = (true as Bool?) ^ nil        // nil — indeterminate
+let same = (true as Bool?) !^ true         // true — equivalent
 ```
 
-## Related Packages
+Conform your own types to `Logic.Protocol` (two-valued) or `Logic.Ternary.Protocol` (three-valued) to reuse every operator and builder.
 
-### Used By
+---
 
-- [coenttb-ui](https://github.com/coenttb/coenttb-ui): A Swift package with UI components for coenttb applications.
+## Installation
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/swift-primitives/swift-logic-primitives.git", branch: "main")
+]
+```
+
+```swift
+.target(
+    name: "App",
+    dependencies: [
+        .product(name: "Logic Primitives", package: "swift-logic-primitives"),
+    ]
+)
+```
+
+Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (or the matching Linux / Windows toolchain).
+
+---
+
+## Architecture
+
+Import `Logic Primitives` for everything, or a narrower product to keep your surface small. `Logic Primitive` has no dependencies; the remaining targets compose on top of it.
+
+| Product | Target | Purpose |
+|---------|--------|---------|
+| `Logic Primitive` | `Sources/Logic Primitive/` | The `Logic` namespace: the two-valued `Logic.Protocol`, the `Bool` conformance, and the classical operators `Logic.{and, or, not, xor, nand, nor, xnor, implies, iff}`. |
+| `Logic Ternary Primitives` | `Sources/Logic Ternary Primitives/` | `Logic.Ternary`: Strong Kleene three-valued logic — the `Logic.Ternary.Protocol`, the `Bool?` conformance, the `!`, `^`, and `!^` operators with their short-circuiting AND / OR / NAND / NOR forms, and the `all` / `any` / `none` result builders. |
+| `Logic Primitives` | `Sources/Logic Primitives/` | Umbrella that re-exports `Logic Primitive` and `Logic Ternary Primitives`. |
+| `Logic Primitives Test Support` | `Tests/Support/` | Re-exports the umbrella for test consumers. |
+
+Foundation-free.
+
+---
+
+## Platform Support
+
+| Platform | Status |
+|----------|--------|
+| macOS 26 | Full support |
+| Linux | Full support |
+| Windows | Full support |
+| iOS / tvOS / watchOS / visionOS | Supported |
+
+---
+
+## Community
+
+<!-- BEGIN: discussion -->
+<!-- Discussion thread created at publication. -->
+<!-- END: discussion -->
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+Apache 2.0. See [LICENSE.md](LICENSE.md).

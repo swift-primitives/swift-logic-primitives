@@ -1,90 +1,111 @@
-// swift-tools-version:5.10.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.3.1
 
 import PackageDescription
 
-extension String {
-    static let logicOperators: Self = "LogicOperators"
-    static let logicTesting: Self = "LogicTesting"
-    static let closure: Self = "PredicateLogic"
-    static let optional: Self = "OptionalLogic"
-    static let optionalViews: Self = "OptionalViews"
-}
+let package = Package(
+    name: "swift-logic-primitives",
+    platforms: [
+        .macOS(.v26),
+        .iOS(.v26),
+        .tvOS(.v26),
+        .watchOS(.v26),
+        .visionOS(.v26)
+    ],
+    products: [
+        // MARK: - Namespace (per [MOD-017])
+        .library(
+            name: "Logic Primitive",
+            targets: ["Logic Primitive"]
+        ),
 
-extension Target.Dependency {
-    static var logicOperators: Self { .target(name: .logicOperators) }
-    static var logicTesting: Self { .target(name: .logicTesting) }
-    static var closure: Self { .target(name: .closure) }
-    static var optional: Self { .target(name: .optional) }
-}
+        // MARK: - Umbrella
+        .library(
+            name: "Logic Primitives",
+            targets: ["Logic Primitives"]
+        ),
 
-extension Package {
-    static func logicOperators(
-        targets: [(name: String, dependencies: [Target.Dependency])]
-    ) -> Package {
-
-        let names = targets.map(\.name)
-
-        return Package(
-            name: "swift-logic-operators",
-            platforms: [ .macOS(.v10_15), .iOS(.v13) ],
-//            platforms: [ .macOS(.v14), .iOS(.v13) ],
-            products: [
-                names.map { name in
-                        .library(
-                            name: name,
-                            targets: [.init(stringLiteral: name)]
-                        )
-                }
-            ].flatMap { $0 },
-            targets: [
-                targets.map { document in
-                    Target.target(
-                        name: "\(document.name)",
-                        dependencies: document.dependencies
-                    )
-                },
-                targets.map { document in
-                    Target.testTarget(
-                        name: "\(document.name) Tests",
-                        dependencies: [
-                            Target.Dependency(stringLiteral: document.name),
-                            document.name != .logicTesting ? .logicTesting : nil
-                        ].compactMap { $0 }
-                    )
-                }
-            ].flatMap { $0 },
-            swiftLanguageVersions: [.v5]
-        )
-    }
-}
-
-let package = Package.logicOperators(
+        .library(
+            name: "Logic Ternary Primitives",
+            targets: ["Logic Ternary Primitives"]
+        ),
+        .library(
+            name: "Logic Primitives Test Support",
+            targets: ["Logic Primitives Test Support"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main")
+    ],
     targets: [
-        (
-            name: .logicOperators,
+        // MARK: - Namespace (per [MOD-017])
+        // Zero external deps. Owns `public enum Logic` + all stdlib-only
+        // foundational decls (the Logic namespace, Logic.Protocol, Bool
+        // conformance, and the Logic.{and,or,not,xor,…} operator functions).
+        .target(
+            name: "Logic Primitive",
+            dependencies: []
+        ),
+
+        // MARK: - Ternary
+        .target(
+            name: "Logic Ternary Primitives",
             dependencies: [
-                .closure,
-                .optional
+                "Logic Primitive"
             ]
         ),
-        (
-            name: .logicTesting,
-            dependencies: []
-        ),
-        (
-            name: .closure,
-            dependencies: []
-        ),
-        (
-            name: .optional,
-            dependencies: []
-        ),
-        (
-            name: .optionalViews,
+
+        // MARK: - Umbrella
+        .target(
+            name: "Logic Primitives",
             dependencies: [
-                .optional
+                "Logic Primitive",
+                "Logic Ternary Primitives",
             ]
-        )
-    ]
+        ),
+        .testTarget(
+            name: "Logic Primitives Tests",
+            dependencies: [
+                "Logic Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Logic Ternary Primitives Tests",
+            dependencies: [
+                "Logic Ternary Primitives",
+                // The Builder tests use `Bool.all` from Standard Library Extensions.
+                // Pre-migration this resolved transitively through the Core SLE funnel;
+                // the funnel is redistributed per [MOD-038], so declare it directly.
+                .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
+            ]
+        ),
+
+        // MARK: - Test Support
+        .target(
+            name: "Logic Primitives Test Support",
+            dependencies: [
+                "Logic Primitives",
+            ],
+            path: "Tests/Support"
+        ),
+    ],
+    swiftLanguageModes: [.v6]
 )
+
+for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
+    let ecosystem: [SwiftSetting] = [
+        .strictMemorySafety(),
+        .enableUpcomingFeature("ExistentialAny"),
+        .enableUpcomingFeature("InternalImportsByDefault"),
+        .enableUpcomingFeature("MemberImportVisibility"),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableExperimentalFeature("LifetimeDependence"),
+        .enableExperimentalFeature("Lifetimes"),
+        .enableExperimentalFeature("SuppressedAssociatedTypes"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableUpcomingFeature("LifetimeDependence"),
+    ]
+
+    let package: [SwiftSetting] = []
+
+    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
+}
