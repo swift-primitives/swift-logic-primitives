@@ -29,6 +29,10 @@ let package = Package(
             targets: ["Logic Ternary Primitives"]
         ),
         .library(
+            name: "Logic Ternary Strict",
+            targets: ["Logic Ternary Strict"]
+        ),
+        .library(
             name: "Logic Primitives Test Support",
             targets: ["Logic Primitives Test Support"]
         ),
@@ -54,6 +58,14 @@ let package = Package(
             ]
         ),
 
+        // MARK: - Strict (opt-in collapse guards)
+        // Deliberately NOT part of the umbrella: consumers opt in to the
+        // deprecation diagnostics on nil-collapsing Bool? spellings.
+        .target(
+            name: "Logic Ternary Strict",
+            dependencies: []
+        ),
+
         // MARK: - Umbrella
         .target(
             name: "Logic Primitives",
@@ -66,6 +78,12 @@ let package = Package(
             name: "Logic Primitives Tests",
             dependencies: [
                 "Logic Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Logic Ternary Strict Tests",
+            dependencies: [
+                "Logic Ternary Strict"
             ]
         ),
         .testTarget(
