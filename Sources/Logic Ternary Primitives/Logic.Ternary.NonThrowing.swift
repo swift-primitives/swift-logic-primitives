@@ -14,7 +14,8 @@ public func && <T: Logic.Ternary.`Protocol`>(
     lhs: T,
     rhs: @autoclosure () -> T
 ) -> T {
-    Logic.Ternary._and(lhs, rhs())
+    if T.from(lhs) == false { return .false }
+    return Logic.Ternary._and(lhs, rhs())
 }
 
 /// Non-throwing overload for Strong Kleene three-valued logic OR.
@@ -23,7 +24,8 @@ public func || <T: Logic.Ternary.`Protocol`>(
     lhs: T,
     rhs: @autoclosure () -> T
 ) -> T {
-    Logic.Ternary._or(lhs, rhs())
+    if T.from(lhs) == true { return .true }
+    return Logic.Ternary._or(lhs, rhs())
 }
 
 /// Non-throwing overload for Strong Kleene three-valued logic NAND.
@@ -32,7 +34,8 @@ public func !&& <T: Logic.Ternary.`Protocol`>(
     lhs: T,
     rhs: @autoclosure () -> T
 ) -> T {
-    Logic.Ternary._nand(lhs, rhs())
+    if T.from(lhs) == false { return .true }
+    return Logic.Ternary._nand(lhs, rhs())
 }
 
 /// Non-throwing overload for Strong Kleene three-valued logic NOR.
@@ -41,7 +44,8 @@ public func !|| <T: Logic.Ternary.`Protocol`>(
     lhs: T,
     rhs: @autoclosure () -> T
 ) -> T {
-    Logic.Ternary._nor(lhs, rhs())
+    if T.from(lhs) == true { return .false }
+    return Logic.Ternary._nor(lhs, rhs())
 }
 
 // MARK: - Non-Throwing Static Methods
@@ -53,7 +57,8 @@ extension Logic.Ternary {
         _ lhs: T,
         _ rhs: @autoclosure () -> T
     ) -> T {
-        _and(lhs, rhs())
+        if T.from(lhs) == false { return .false }
+        return _and(lhs, rhs())
     }
 
     /// Non-throwing overload for Strong Kleene OR.
@@ -62,7 +67,8 @@ extension Logic.Ternary {
         _ lhs: T,
         _ rhs: @autoclosure () -> T
     ) -> T {
-        _or(lhs, rhs())
+        if T.from(lhs) == true { return .true }
+        return _or(lhs, rhs())
     }
 
     /// Non-throwing overload for Strong Kleene NAND.
@@ -71,7 +77,8 @@ extension Logic.Ternary {
         _ lhs: T,
         _ rhs: @autoclosure () -> T
     ) -> T {
-        _nand(lhs, rhs())
+        if T.from(lhs) == false { return .true }
+        return _nand(lhs, rhs())
     }
 
     /// Non-throwing overload for Strong Kleene NOR.
@@ -80,6 +87,17 @@ extension Logic.Ternary {
         _ lhs: T,
         _ rhs: @autoclosure () -> T
     ) -> T {
-        _nor(lhs, rhs())
+        if T.from(lhs) == true { return .false }
+        return _nor(lhs, rhs())
+    }
+
+    /// Non-throwing overload for Strong Kleene implication.
+    @inlinable
+    public static func implies<T: `Protocol`>(
+        _ lhs: T,
+        _ rhs: @autoclosure () -> T
+    ) -> T {
+        if T.from(lhs) == false { return .true }
+        return _implies(lhs, rhs())
     }
 }

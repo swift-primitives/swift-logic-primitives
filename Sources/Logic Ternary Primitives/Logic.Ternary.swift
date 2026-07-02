@@ -107,6 +107,14 @@ extension Logic.Ternary {
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
         return .true
     }
+
+    @inlinable @inline(always)
+    internal static func _implies<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+        if T.from(lhs) == false { return .true }
+        if T.from(rhs) == true { return .true }
+        if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
+        return .false
+    }
 }
 
 // MARK: - AND Operator
@@ -365,6 +373,48 @@ public func !|| <E: Swift.Error, T: Logic.Ternary.`Protocol`>(
 ) throws(E) -> T {
     if T.from(lhs) == true { return .false }
     return Logic.Ternary._nor(lhs, try rhs())
+}
+
+// MARK: - Implication
+
+extension Logic.Ternary {
+    /// Performs Strong Kleene three-valued logic implication (material conditional) (static implementation).
+    ///
+    /// `implies(a, b)` is `!a || b`: returns `true` if `lhs` is `false` (vacuous truth, short-circuits) or `rhs` is `true`, `false` only when `lhs` is `true` and `rhs` is `false`, and `unknown` otherwise.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let result = Logic.Ternary.implies(nil as Bool?, true)
+    /// // result = true (x → true is true even when x is unknown)
+    /// ```
+    @inlinable
+    public static func implies<E: Swift.Error, T: `Protocol`>(
+        _ lhs: T,
+        _ rhs: @autoclosure () throws(E) -> T
+    ) throws(E) -> T {
+        if T.from(lhs) == false { return .true }
+        return _implies(lhs, try rhs())
+    }
+}
+
+// MARK: - Biconditional
+
+extension Logic.Ternary {
+    /// Performs Strong Kleene three-valued logic biconditional (if and only if) (static implementation).
+    ///
+    /// Returns `unknown` if either operand is `unknown`, otherwise returns `true` if both operands have the same value. This is equivalent to XNOR.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let result = Logic.Ternary.iff(true as Bool?, true)
+    /// // result = true (both are true)
+    /// ```
+    @inlinable
+    public static func iff<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+        xnor(lhs, rhs)
+    }
 }
 
 // MARK: - XNOR Operator

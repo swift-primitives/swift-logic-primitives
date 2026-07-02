@@ -93,7 +93,7 @@ struct `Logic.Ternary.Builder Tests` {
         }
 
         @Test
-        func `Conditional inclusion - false branch yields unknown`() {
+        func `Conditional inclusion - untaken branch is conjunction identity`() {
             let condition = false
             let result = Bool?.all {
                 true
@@ -101,7 +101,21 @@ struct `Logic.Ternary.Builder Tests` {
                     true
                 }
             }
-            // In ternary logic, missing value = unknown
+            // The `if` gates on a known Bool: an untaken branch is known-absent,
+            // contributing the conjunction identity (true) — not unknown.
+            #expect(result == true)
+        }
+
+        @Test
+        func `Conditional inclusion - taken branch contributes unknown`() {
+            let condition = true
+            let unknown: Bool? = nil
+            let result = Bool?.all {
+                true
+                if condition {
+                    unknown
+                }
+            }
             #expect(result == nil)
         }
 
@@ -239,7 +253,7 @@ struct `Logic.Ternary.Builder Tests` {
         }
 
         @Test
-        func `Conditional inclusion - false branch yields unknown`() {
+        func `Conditional inclusion - untaken branch is disjunction identity`() {
             let condition = false
             let result = Bool?.any {
                 false
@@ -247,8 +261,9 @@ struct `Logic.Ternary.Builder Tests` {
                     true
                 }
             }
-            // In ternary logic, missing value = unknown
-            #expect(result == nil)
+            // The `if` gates on a known Bool: an untaken branch is known-absent,
+            // contributing the disjunction identity (false) — not unknown.
+            #expect(result == false)
         }
     }
 
@@ -326,6 +341,20 @@ struct `Logic.Ternary.Builder Tests` {
                 nil as Bool?
             }
             #expect(result == nil)
+        }
+
+        @Test
+        func `Conditional inclusion - untaken branch is identity`() {
+            let condition = false
+            let result = Bool?.none {
+                false
+                if condition {
+                    true
+                }
+            }
+            // Untaken branch contributes the accumulated disjunction's identity
+            // (false), which the final NOR negates: NOR(false) = true.
+            #expect(result == true)
         }
     }
 
@@ -441,14 +470,15 @@ struct `Logic.Ternary.Builder Tests` {
         func `Bool.all vs Bool?.all - with conditional`() {
             let condition = false
 
-            // Bool.all: missing value treated as identity (true for AND)
+            // Both builders treat an untaken branch as the conjunction identity
+            // (true): the `if` condition is a known Bool, so absence is known,
+            // not unknown. The two builders agree on identical syntax.
             let boolResult = Bool.all {
                 true
                 if condition {
                     true
                 }
             }
-            // Bool?.all: missing value treated as unknown
             let ternaryResult: Bool? = Bool?.all {
                 true
                 if condition {
@@ -456,8 +486,8 @@ struct `Logic.Ternary.Builder Tests` {
                 }
             }
 
-            #expect(boolResult == true)  // Bool treats missing as true (identity for AND)
-            #expect(ternaryResult == nil)  // Bool? treats missing as unknown
+            #expect(boolResult == true)
+            #expect(ternaryResult == true)
         }
     }
 }

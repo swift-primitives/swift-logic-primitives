@@ -15,7 +15,7 @@
 extension Logic {
     /// Performs logical AND.
     ///
-    /// Returns `true` only if both operands are `true`.
+    /// Returns `true` only if both operands are `true`. For multi-valued logics, follows Strong Kleene semantics: `false` dominates, then indeterminate values propagate (the indeterminate operand is returned), then `true`.
     ///
     /// ## Example
     ///
@@ -25,11 +25,12 @@ extension Logic {
     /// ```
     @inlinable
     public static func and<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
-        guard let l = T.from(lhs), let r = T.from(rhs) else {
-            // For binary logic this won't happen, but supports extension
-            return .false
+        switch (T.from(lhs), T.from(rhs)) {
+        case (false, _), (_, false): return .false
+        case (nil, _): return lhs
+        case (_, nil): return rhs
+        default: return .true
         }
-        return T(l && r)
     }
 }
 
@@ -38,7 +39,7 @@ extension Logic {
 extension Logic {
     /// Performs logical OR.
     ///
-    /// Returns `true` if either operand is `true`.
+    /// Returns `true` if either operand is `true`. For multi-valued logics, follows Strong Kleene semantics: `true` dominates, then indeterminate values propagate (the indeterminate operand is returned), then `false`.
     ///
     /// ## Example
     ///
@@ -48,10 +49,12 @@ extension Logic {
     /// ```
     @inlinable
     public static func or<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
-        guard let l = T.from(lhs), let r = T.from(rhs) else {
-            return .false
+        switch (T.from(lhs), T.from(rhs)) {
+        case (true, _), (_, true): return .true
+        case (nil, _): return lhs
+        case (_, nil): return rhs
+        default: return .false
         }
-        return T(l || r)
     }
 }
 
@@ -60,7 +63,7 @@ extension Logic {
 extension Logic {
     /// Performs logical NOT (negation).
     ///
-    /// Returns the logical negation of the operand.
+    /// Returns the logical negation of the operand. For multi-valued logics, an indeterminate operand is returned unchanged, per Strong Kleene semantics.
     ///
     /// ## Example
     ///
@@ -82,7 +85,7 @@ extension Logic {
 extension Logic {
     /// Performs logical XOR (exclusive OR).
     ///
-    /// Returns `true` if exactly one operand is `true`.
+    /// Returns `true` if exactly one operand is `true`. For multi-valued logics, follows Strong Kleene semantics: an indeterminate operand propagates (is returned), because XOR is never determined by one known operand alone.
     ///
     /// ## Example
     ///
@@ -92,9 +95,8 @@ extension Logic {
     /// ```
     @inlinable
     public static func xor<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
-        guard let l = T.from(lhs), let r = T.from(rhs) else {
-            return .false
-        }
+        guard let l = T.from(lhs) else { return lhs }
+        guard let r = T.from(rhs) else { return rhs }
         return T(l != r)
     }
 }
@@ -163,7 +165,7 @@ extension Logic {
     /// Performs logical implication (material conditional).
     ///
     /// `implies(a, b)` is equivalent to `!a || b`.
-    /// Returns `false` only when `lhs` is `true` and `rhs` is `false`.
+    /// Returns `false` only when `lhs` is `true` and `rhs` is `false`. For multi-valued logics, follows Strong Kleene semantics: `false → x` and `x → true` are `true` even when `x` is indeterminate.
     ///
     /// ## Example
     ///

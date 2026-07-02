@@ -79,11 +79,12 @@ extension Logic.Ternary {
                 .true
             }
 
-            /// Treats an omitted optional component as `unknown`.
+            /// Treats an untaken conditional branch as the conjunction identity, `true`.
+            ///
+            /// An `if` gates on a known `Bool`, so an untaken branch is known to be absent — not epistemically unknown. Write `unknown` (or `nil` for `Bool?`) explicitly for genuinely indeterminate components.
             @inlinable
             public static func buildOptional(_ component: T?) -> T {
-                // Missing value means unknown in ternary logic
-                component ?? .unknown
+                component ?? .true
             }
 
             /// Selects the first branch of a conditional component.
@@ -183,10 +184,12 @@ extension Logic.Ternary {
                 .false
             }
 
-            /// Treats an omitted optional component as `unknown`.
+            /// Treats an untaken conditional branch as the disjunction identity, `false`.
+            ///
+            /// An `if` gates on a known `Bool`, so an untaken branch is known to be absent — not epistemically unknown. Write `unknown` (or `nil` for `Bool?`) explicitly for genuinely indeterminate components.
             @inlinable
             public static func buildOptional(_ component: T?) -> T {
-                component ?? .unknown
+                component ?? .false
             }
 
             /// Selects the first branch of a conditional component.
@@ -285,10 +288,12 @@ extension Logic.Ternary {
                 .false
             }
 
-            /// Treats an omitted optional component as `unknown`.
+            /// Treats an untaken conditional branch as the accumulated disjunction's identity, `false` (which negates to `true` in the final NOR).
+            ///
+            /// An `if` gates on a known `Bool`, so an untaken branch is known to be absent — not epistemically unknown. Write `unknown` (or `nil` for `Bool?`) explicitly for genuinely indeterminate components.
             @inlinable
             public static func buildOptional(_ component: T?) -> T {
-                component ?? .unknown
+                component ?? .false
             }
 
             /// Selects the first branch of a conditional component.
