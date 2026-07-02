@@ -11,7 +11,7 @@
 
 import Testing
 
-@testable import Logic_Ternary_Strict
+@testable import Logic_Ternary_Primitives
 
 @Suite
 struct OptionalBoolStrictTests {

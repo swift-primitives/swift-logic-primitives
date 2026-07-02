@@ -263,7 +263,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return true
         }
         let result: Bool? = (false as Bool?) && rhs()
-        #expect(result == false)
+        #expect(result == .some(false))
         #expect(evaluated == false)
     }
 
@@ -287,7 +287,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return false
         }
         let result: Bool? = (true as Bool?) || rhs()
-        #expect(result == true)
+        #expect(result == .some(true))
         #expect(evaluated == false)
     }
 
@@ -299,7 +299,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return true
         }
         let result: Bool? = (false as Bool?) !&& rhs()
-        #expect(result == true)
+        #expect(result == .some(true))
         #expect(evaluated == false)
     }
 
@@ -311,7 +311,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return false
         }
         let result: Bool? = (true as Bool?) !|| rhs()
-        #expect(result == false)
+        #expect(result == .some(false))
         #expect(evaluated == false)
     }
 
@@ -323,7 +323,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return false
         }
         let result = Logic.Ternary.implies(false as Bool?, rhs())
-        #expect(result == true)
+        #expect(result == .some(true))
         #expect(evaluated == false)
     }
 
@@ -335,7 +335,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return true
         }
         let result = Logic.Ternary.and(false as Bool?, rhs())
-        #expect(result == false)
+        #expect(result == .some(false))
         #expect(evaluated == false)
     }
 
@@ -347,7 +347,7 @@ struct ThreeValuedLogicShortCircuitTests {
             return false
         }
         let result = Logic.Ternary.or(true as Bool?, rhs())
-        #expect(result == true)
+        #expect(result == .some(true))
         #expect(evaluated == false)
     }
 }
@@ -465,6 +465,6 @@ struct ThreeValuedLogicComplexExpressionTests {
         // (true || nil) && false = true && false = false
         let aOrC: Bool? = a || c
         let result3: Bool? = aOrC && b
-        #expect(result3 == false)
+        #expect(result3 == .some(false))
     }
 }

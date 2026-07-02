@@ -117,8 +117,8 @@ struct BoolLogicProtocolTests {
 
         #expect(t == true)
         #expect(f == false)
-        #expect(Bool.from(true) == true)
-        #expect(Bool.from(false) == false)
+        #expect(Bool.from(true) == .some(true))
+        #expect(Bool.from(false) == .some(false))
         #expect(Bool(true) == true)
         #expect(Bool(false) == false)
     }
