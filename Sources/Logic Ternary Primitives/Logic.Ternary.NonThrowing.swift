@@ -1,4 +1,3 @@
-// swiftlint:disable:next workaround_marker_present
 // WORKAROUND: Non-throwing overloads shadow the typed-throws ternary operators so the
 // `&&`/`||`/`!&&`/`!||` forms type-check on non-throwing operands.
 // WHY: The compiler cannot infer the thrown-error type as `Never` for a typed-throws

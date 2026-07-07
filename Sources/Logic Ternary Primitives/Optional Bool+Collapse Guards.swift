@@ -28,7 +28,11 @@
 /// Compares a ternary value against a definite Boolean, collapsing `unknown`.
 ///
 /// In Strong Kleene semantics `nil` means "not yet assessed". This comparison maps it to `false`, turning an epistemic gap into a definite verdict — which is almost never intended in ternary-logic code.
-@available(*, deprecated, message: "collapses Kleene unknown to a definite verdict — compose with Bool?.all/any, &&, ||, ! instead; if the collapse is intended, spell it explicitly with .isTrue / .isFalse / .isUnknown")
+@available(
+    *,
+    deprecated,
+    message: "collapses Kleene unknown to a definite verdict — compose with Bool?.all/any, &&, ||, ! instead; if the collapse is intended, spell it explicitly with .isTrue / .isFalse / .isUnknown"
+)
 public func == (lhs: Bool?, rhs: Bool) -> Bool {
     lhs == .some(rhs)
 }
@@ -36,7 +40,11 @@ public func == (lhs: Bool?, rhs: Bool) -> Bool {
 /// Compares a definite Boolean against a ternary value, collapsing `unknown`.
 ///
 /// The reversed spelling of the same collapse: `true == verdict` maps an unassessed verdict to `false`.
-@available(*, deprecated, message: "collapses Kleene unknown to a definite verdict — compose with Bool?.all/any, &&, ||, ! instead; if the collapse is intended, spell it explicitly with .isTrue / .isFalse / .isUnknown")
+@available(
+    *,
+    deprecated,
+    message: "collapses Kleene unknown to a definite verdict — compose with Bool?.all/any, &&, ||, ! instead; if the collapse is intended, spell it explicitly with .isTrue / .isFalse / .isUnknown"
+)
 public func == (lhs: Bool, rhs: Bool?) -> Bool {
     .some(lhs) == rhs
 }
@@ -68,7 +76,12 @@ public func != (lhs: Bool, rhs: Bool) -> Bool {
 /// Coalesces a ternary value into a definite Boolean, collapsing `unknown`.
 ///
 /// In Strong Kleene semantics `nil` means "not yet assessed". Nil-coalescing silently converts that epistemic gap into the fallback verdict.
-@available(*, deprecated, message: "collapses Kleene unknown — a nil-coalesced verdict silently converts 'not assessed' into a definite value; compose with Kleene operators or spell the collapse explicitly with .isTrue / .isFalse / .isUnknown")
+@available(
+    *,
+    deprecated,
+    message:
+        "collapses Kleene unknown — a nil-coalesced verdict silently converts 'not assessed' into a definite value; compose with Kleene operators or spell the collapse explicitly with .isTrue / .isFalse / .isUnknown"
+)
 public func ?? (lhs: Bool?, rhs: @autoclosure () -> Bool) -> Bool {
     switch lhs {
     case .some(let value): value
