@@ -77,7 +77,7 @@ extension Logic.Ternary {
 
 extension Logic.Ternary {
     @inlinable @inline(always)
-    internal static func _and<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+    package static func _and<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
         if T.from(lhs).isFalse { return .false }
         if T.from(rhs).isFalse { return .false }
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
@@ -85,7 +85,7 @@ extension Logic.Ternary {
     }
 
     @inlinable @inline(always)
-    internal static func _or<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+    package static func _or<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
         if T.from(lhs).isTrue { return .true }
         if T.from(rhs).isTrue { return .true }
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
@@ -93,7 +93,7 @@ extension Logic.Ternary {
     }
 
     @inlinable @inline(always)
-    internal static func _nand<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+    package static func _nand<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
         if T.from(lhs).isFalse { return .true }
         if T.from(rhs).isFalse { return .true }
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
@@ -101,7 +101,7 @@ extension Logic.Ternary {
     }
 
     @inlinable @inline(always)
-    internal static func _nor<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+    package static func _nor<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
         if T.from(lhs).isTrue { return .false }
         if T.from(rhs).isTrue { return .false }
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
@@ -109,7 +109,7 @@ extension Logic.Ternary {
     }
 
     @inlinable @inline(always)
-    internal static func _implies<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
+    package static func _implies<T: `Protocol`>(_ lhs: T, _ rhs: T) -> T {
         if T.from(lhs).isFalse { return .true }
         if T.from(rhs).isTrue { return .true }
         if T.from(lhs) == nil || T.from(rhs) == nil { return .unknown }
