@@ -110,7 +110,7 @@ struct LogicOperatorTests {
 struct BoolLogicProtocolTests {
 
     @Test
-    func boolConformance() {
+    func `bool Conformance`() {
         // Bool conforms to Logic.Protocol
         let t: Bool = .true
         let f: Bool = .false

@@ -12,7 +12,9 @@ struct BinaryTestCase: CustomTestStringConvertible, Sendable {
     let lhs: Bool?
     let rhs: Bool?
     let expected: Bool?
+}
 
+extension BinaryTestCase {
     var testDescription: String {
         "\(lhs.map(String.init(describing:)) ?? "nil") → \(rhs.map(String.init(describing:)) ?? "nil") = \(expected.map(String.init(describing:)) ?? "nil")"
     }
@@ -22,7 +24,9 @@ struct BinaryTestCase: CustomTestStringConvertible, Sendable {
 struct UnaryTestCase: CustomTestStringConvertible, Sendable {
     let input: Bool?
     let expected: Bool?
+}
 
+extension UnaryTestCase {
     var testDescription: String {
         "\(input.map(String.init(describing:)) ?? "nil") → \(expected.map(String.init(describing:)) ?? "nil")"
     }
@@ -75,7 +79,7 @@ struct ThreeValuedLogicANDTests {
     }
 
     @Test(arguments: andCases)
-    func andOperator(_ testCase: BinaryTestCase) {
+    func `and Operator`(_ testCase: BinaryTestCase) {
         let result: Bool? = testCase.lhs && testCase.rhs
         #expect(result == testCase.expected)
     }
@@ -107,7 +111,7 @@ struct ThreeValuedLogicORTests {
     }
 
     @Test(arguments: orCases)
-    func orOperator(_ testCase: BinaryTestCase) {
+    func `or Operator`(_ testCase: BinaryTestCase) {
         let result: Bool? = testCase.lhs || testCase.rhs
         #expect(result == testCase.expected)
     }
@@ -245,7 +249,7 @@ struct ThreeValuedLogicImplicationTests {
 
     /// Verifies that implication a → b matches (not a) or b.
     @Test(arguments: implicationCases)
-    func matchesDisjunctiveForm(_ testCase: BinaryTestCase) {
+    func `matches Disjunctive Form`(_ testCase: BinaryTestCase) {
         let result: Bool? = !testCase.lhs || testCase.rhs
         #expect(result == testCase.expected)
     }
@@ -256,7 +260,7 @@ struct ThreeValuedLogicImplicationTests {
 @Suite
 struct ThreeValuedLogicShortCircuitTests {
     @Test
-    func andShortCircuitsOnFalse() {
+    func `and Short Circuits On False`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -268,7 +272,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func andEvaluatesRhsWhenUndetermined() {
+    func `and Evaluates Rhs When Undetermined`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -280,7 +284,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func orShortCircuitsOnTrue() {
+    func `or Short Circuits On True`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -292,7 +296,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func nandShortCircuitsOnFalse() {
+    func `nand Short Circuits On False`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -304,7 +308,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func norShortCircuitsOnTrue() {
+    func `nor Short Circuits On True`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -316,7 +320,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func impliesShortCircuitsOnFalseAntecedent() {
+    func `implies Short Circuits On False Antecedent`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -328,7 +332,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func staticAndShortCircuitsOnFalse() {
+    func `static And Short Circuits On False`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -340,7 +344,7 @@ struct ThreeValuedLogicShortCircuitTests {
     }
 
     @Test
-    func staticOrShortCircuitsOnTrue() {
+    func `static Or Short Circuits On True`() {
         var evaluated = false
         func rhs() -> Bool? {
             evaluated = true
@@ -359,7 +363,7 @@ struct ThreeValuedLogicDeMorganTests {
     static let values: [Bool?] = [true, false, nil]
 
     @Test(arguments: values, values)
-    func deMorganAnd(_ a: Bool?, _ b: Bool?) {
+    func `de Morgan And`(_ a: Bool?, _ b: Bool?) {
         // !(a && b) == !a || !b — holds across all nine ternary pairs
         let lhs: Bool? = !(a && b)
         let rhs: Bool? = !a || !b
@@ -367,7 +371,7 @@ struct ThreeValuedLogicDeMorganTests {
     }
 
     @Test(arguments: values, values)
-    func deMorganOr(_ a: Bool?, _ b: Bool?) {
+    func `de Morgan Or`(_ a: Bool?, _ b: Bool?) {
         // !(a || b) == !a && !b — holds across all nine ternary pairs
         let lhs: Bool? = !(a || b)
         let rhs: Bool? = !a && !b
@@ -431,7 +435,7 @@ struct BaseLogicKleeneDegradationTests {
 
     /// The base functions must agree with the ternary truth tables on every pair.
     @Test(arguments: values, values)
-    func agreesWithTernaryOperators(_ a: Bool?, _ b: Bool?) {
+    func `agrees With Ternary Operators`(_ a: Bool?, _ b: Bool?) {
         #expect(Logic.and(a, b) == (a && b))
         #expect(Logic.or(a, b) == (a || b))
         #expect(Logic.xor(a, b) == (a ^ b))
@@ -447,7 +451,7 @@ struct BaseLogicKleeneDegradationTests {
 @Suite
 struct ThreeValuedLogicComplexExpressionTests {
     @Test
-    func mixedValues() {
+    func `mixed Values`() {
         let a: Bool? = true
         let b: Bool? = false
         let c: Bool? = nil
