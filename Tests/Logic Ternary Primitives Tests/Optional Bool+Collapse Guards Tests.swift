@@ -14,7 +14,7 @@ import Testing
 @testable import Logic_Ternary_Primitives
 
 @Suite
-struct OptionalBoolStrictTests {
+struct `Optional Bool Strict Tests` {
     static let values: [Bool?] = [true, false, nil]
 
     @Test(arguments: values, [true, false])
